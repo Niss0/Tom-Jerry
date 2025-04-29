@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Tom &amp; Jerry</string>
+    <string name="start_game_button">START GAME</string>
+    <string name="game_name"><![CDATA[Tom & Jerry\'s Game]]></string>
+    <string name="content_description_jerry">jerry</string>
+    <string name="left_button_content_description">Move left</string>
+    <string name="right_button_content_description">Move right</string>
+    <string name="test">test</string>
+    <string name="heart_icon">heart</string>
+    <string name="game_over_message">GAME OVER</string>
+    <string name="right_button">Right Button</string>
+    <string name="left_button">Left Button</string>
+    <string name="life_heart_1">Life heart 1</string>
+    <string name="life_heart_2">Life heart 2</string>
+    <string name="life_heart_3">Life heart 3</string>
+    <string name="move_right">Move right</string>
+    <string name="move_left">Move left</string>
+    <string name="jerry_character">Jerry character</string>
+    <string name="game_over">Game Over!</string>
+    <string name="toast_message_when_hit">Get Good Bruh :P</string>
+</resources>

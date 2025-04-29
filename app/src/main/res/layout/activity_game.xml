@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/game_relative_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/img_cheese_pattern_background"
+    tools:context=".ui.GameActivity">
+
+    <!-- Hearts container -->
+    <RelativeLayout
+        android:id="@+id/hearts_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/heart1"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_heart"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:contentDescription="@string/life_heart_1" />
+
+        <ImageView
+            android:id="@+id/heart2"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_toEndOf="@id/heart1"
+            android:layout_alignTop="@id/heart1"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_heart"
+            android:contentDescription="@string/life_heart_2" />
+
+        <ImageView
+            android:id="@+id/heart3"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_toEndOf="@id/heart2"
+            android:layout_alignTop="@id/heart2"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_heart"
+            android:contentDescription="@string/life_heart_3" />
+    </RelativeLayout>
+
+    <!-- Jerry Character -->
+    <ImageView
+        android:id="@+id/jerry_image_view"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_above="@+id/buttons_container"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_jerry"
+        android:contentDescription="@string/jerry_character" />
+
+    <!-- Game Over Message -->
+    <TextView
+        android:id="@+id/gameOverText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/game_over"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:textColor="#FF0000"
+        android:visibility="invisible" />
+
+    <!-- Controls container -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/buttons_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="16dp">
+
+        <Button
+            android:id="@+id/btn_left_arrow_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_left_arrow_game"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/move_left" />
+
+        <Button
+            android:id="@+id/btn_right_arrow_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_right_arrow_game"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/move_right" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>
