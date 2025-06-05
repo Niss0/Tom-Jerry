@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp"
+    tools:context=".ui.MenuActivity"> <com.google.android.material.textview.MaterialTextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/select_game_mode_text_view"
+    android:textAppearance="?attr/textAppearanceHeadline5"
+    android:layout_marginBottom="32dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/menu_button_slow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/buttons_slow_speed_text_view"
+        android:layout_marginBottom="16dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/menu_button_fast"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/buttons_fast_speed_text_view"
+        android:layout_marginBottom="16dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/menu_sensor_mode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/sensor_controls_text_view"/>
+
+</LinearLayout>

@@ -18,4 +18,12 @@
     <string name="jerry_character">Jerry character</string>
     <string name="game_over">Game Over!</string>
     <string name="toast_message_when_hit">Get Good Bruh :P</string>
+    <string name="odometer_text_view">Distance: 0m</string>
+    <string name="score_format">Score: %1$d</string>
+    <string name="odometer_format">Distance: %1$dm</string>
+    <string name="initial_score">Score: 0</string>
+    <string name="select_game_mode_text_view">Select Game Mode</string>
+    <string name="buttons_fast_speed_text_view">Buttons - Fast Speed</string>
+    <string name="sensor_controls_text_view">Sensor Controls</string>
+    <string name="buttons_slow_speed_text_view">Buttons - Slow Speed</string>
 </resources>

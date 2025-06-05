@@ -5,10 +5,23 @@
     android:id="@+id/game_relative_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/img_cheese_pattern_background"
+    android:background="@drawable/game_background"
     tools:context=".ui.GameActivity">
 
-    <!-- Hearts container -->
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/odometer_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" android:layout_marginTop="16dp"
+        android:text="@string/odometer_text_view"
+        android:textAppearance="?attr/textAppearanceBody1"
+        android:elevation="2dp"
+        android:textStyle="bold"
+        android:padding="16dp"
+        android:textColor="?attr/colorOnSurface" />
+
+
     <RelativeLayout
         android:id="@+id/hearts_container"
         android:layout_width="wrap_content"
@@ -19,37 +32,36 @@
         android:layout_marginEnd="16dp"
         android:padding="16dp">
 
-        <ImageView
-            android:id="@+id/heart1"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_heart"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:contentDescription="@string/life_heart_1" />
+    <ImageView
+        android:id="@+id/heart1"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_heart"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:contentDescription="@string/life_heart_1" />
 
-        <ImageView
-            android:id="@+id/heart2"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_toEndOf="@id/heart1"
-            android:layout_alignTop="@id/heart1"
-            android:layout_marginStart="8dp"
-            android:src="@drawable/ic_heart"
-            android:contentDescription="@string/life_heart_2" />
+    <ImageView
+        android:id="@+id/heart2"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_toEndOf="@id/heart1"
+        android:layout_alignTop="@id/heart1"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/ic_heart"
+        android:contentDescription="@string/life_heart_2" />
 
-        <ImageView
-            android:id="@+id/heart3"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_toEndOf="@id/heart2"
-            android:layout_alignTop="@id/heart2"
-            android:layout_marginStart="8dp"
-            android:src="@drawable/ic_heart"
-            android:contentDescription="@string/life_heart_3" />
-    </RelativeLayout>
+    <ImageView
+        android:id="@+id/heart3"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_toEndOf="@id/heart2"
+        android:layout_alignTop="@id/heart2"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/ic_heart"
+        android:contentDescription="@string/life_heart_3" />
+</RelativeLayout>
 
-    <!-- Jerry Character -->
     <ImageView
         android:id="@+id/jerry_image_view"
         android:layout_width="48dp"
@@ -59,19 +71,25 @@
         android:src="@drawable/ic_jerry"
         android:contentDescription="@string/jerry_character" />
 
-    <!-- Game Over Message -->
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/gameOverText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="@string/game_over"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        android:textColor="#FF0000"
-        android:visibility="invisible" />
+        android:textAppearance="?attr/textAppearanceHeadline4" android:textStyle="bold"
+        android:textColor="#FF0000" android:visibility="invisible" />
 
-    <!-- Controls container -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/game_button_in_game_menu"
+        style="?attr/materialIconButtonFilledTonalStyle" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        app:icon="@drawable/icon_menu_in_game" android:contentDescription="Open Game Menu" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttons_container"
         android:layout_width="match_parent"
@@ -79,23 +97,23 @@
         android:layout_alignParentBottom="true"
         android:padding="16dp">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_left_arrow_game"
-            android:layout_width="wrap_content"
+            style="attr/materialButtonIconStyle" android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/btn_left_arrow_game"
-            android:textSize="24sp"
+            app:icon="@drawable/btn_left_arrow_game" app:iconGravity="textStart"
+            app:iconPadding="0dp" app:iconSize="32dp"  android:padding="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:contentDescription="@string/move_left" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_right_arrow_game"
-            android:layout_width="wrap_content"
+            style="attr/materialButtonIconStyle" android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/btn_right_arrow_game"
-            android:textSize="24sp"
+            app:icon="@drawable/btn_right_arrow_game" app:iconGravity="textStart"
+            app:iconPadding="0dp" app:iconSize="32dp"  android:padding="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
