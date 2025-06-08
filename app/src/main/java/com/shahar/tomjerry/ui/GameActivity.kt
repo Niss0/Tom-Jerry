@@ -1,7 +1,9 @@
 package com.shahar.tomjerry.ui
 
+import android.Manifest
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import com.shahar.tomjerry.viewmodel.GameManager
 import android.os.Bundle
@@ -15,9 +17,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import android.os.VibratorManager
 import android.util.Log
+import androidx.activity.viewModels
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.button.MaterialButton
 import com.shahar.tomjerry.R
+import com.shahar.tomjerry.data.Score
 import com.shahar.tomjerry.utilities.SingleSoundPlayer
 import com.shahar.tomjerry.interfaces.TiltCallback
 import com.shahar.tomjerry.utilities.TiltDetector
@@ -28,6 +35,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.shahar.tomjerry.utilities.GameConstants
+import com.shahar.tomjerry.viewmodel.ScoreViewModel
 
 class GameActivity : AppCompatActivity(), TiltCallback {
     private lateinit var gameManager: GameManager
@@ -48,7 +56,8 @@ class GameActivity : AppCompatActivity(), TiltCallback {
     private var currentGameMode: String? = null
     private var currentGameDelayMs: Long = GameConstants.GAME_SPEED_NORMAL_MS // Default speed
 
-
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val scoreViewModel: ScoreViewModel by viewModels()
 
     private val coinViews = mutableMapOf<Pair<Int, Int>, ImageView>()
     private var screenWidth = 0
@@ -61,6 +70,8 @@ class GameActivity : AppCompatActivity(), TiltCallback {
 
     // Define initial desired size for Jerry and Tom (in pixels)
     private var characterSize = 0
+    private var isScoreSaved = false
+    private val LOCATION_PERMISSION_REQUEST_CODE = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,6 +83,9 @@ class GameActivity : AppCompatActivity(), TiltCallback {
         gameManager = GameManager()
         soundPlayer = SingleSoundPlayer(this)
         tiltDetector = TiltDetector(this, this)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
         // Initialize UI elements
         jerryImageView = findViewById(R.id.jerry_image_view)
         buttonLeft = findViewById(R.id.btn_left_arrow_game)
@@ -248,9 +262,64 @@ class GameActivity : AppCompatActivity(), TiltCallback {
         stopGame()
         // Show game over message
         findViewById<TextView>(R.id.gameOverText).visibility = View.VISIBLE
+        handleGameOver()
+
+    }
+
+    private fun handleGameOver() {
+        if (isScoreSaved) return
+        requestLocationAndSaveScore()
+    }
+
+    private fun requestLocationAndSaveScore() {
+        // Check if we have permission to access fine location.
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            // Permission is already granted, get the location and save the score.
+            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                val finalScore = gameManager.getDistanceTraveled().toInt() + gameManager.getCoinsCollectedCount() * 5
+                val latitude = location?.latitude ?: 32.0853 // Default to Ramat Gan if null
+                val longitude = location?.longitude ?: 34.7818 // Default to Ramat Gan if null
+
+                val score = Score(score = finalScore, latitude = latitude, longitude = longitude)
+                scoreViewModel.insert(score)
+                makeText(this, "Score of $finalScore saved!", LENGTH_LONG).show()
+            }
+        } else {
+            // Permission is not granted, request it from the user.
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission was granted by the user. Now we can try again.
+                requestLocationAndSaveScore()
+            } else {
+                // Permission was denied. Save the score with a default location.
+                val finalScore = gameManager.getDistanceTraveled().toInt()
+                val score = Score(score = finalScore, latitude = 32.0853, longitude = 34.7818)
+                scoreViewModel.insert(score)
+                makeText(this, "Score of $finalScore saved! (Location permission denied)", LENGTH_LONG).show()
+            }
+        }
     }
 
     private fun startGame() {
+        isScoreSaved = false // Reset the flag at the start of a new game
         isGameRunning = true
         var obstacleSpawnCounter = 0
         var obstacleSpawnFrequency = 5 // Adjust to control how often obstacles spawn
@@ -615,9 +684,6 @@ class GameActivity : AppCompatActivity(), TiltCallback {
                 soundPlayer.playSound(R.raw.crash_sound)
 
                 Log.d("GameActivity", "UI updated for OBSTACLE_COLLISION. Lives: ${gameManager.getRemainingHearts()}")
-                if (gameManager.isGameOver()) {
-                    gameOver()
-                }
             }
             GameManager.InteractionResult.NONE -> {
                 Log.d("GameActivity", "InteractionResult was NONE.")

@@ -34,4 +34,12 @@
         android:layout_height="wrap_content"
         android:text="@string/sensor_controls_text_view"/>
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/menu_button_high_scores"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/high_scores_button" />
+
 </LinearLayout>
+

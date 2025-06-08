@@ -3,31 +3,38 @@ package com.shahar.tomjerry.ui
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.button.MaterialButton
-import com.shahar.tomjerry.R
-import com.shahar.tomjerry.utilities.GameConstants // Import your constants
+import com.shahar.tomjerry.databinding.ActivityMenuBinding // Add this import
+import com.shahar.tomjerry.utilities.GameConstants
 
 class MenuActivity : AppCompatActivity() {
 
+    // Add a binding variable
+    private lateinit var binding: ActivityMenuBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_menu)
+        // Initialize ViewBinding
+        binding = ActivityMenuBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val buttonSlow: MaterialButton = findViewById(R.id.menu_button_slow)
-        val buttonFast: MaterialButton = findViewById(R.id.menu_button_fast)
-        val sensorModeButton: MaterialButton = findViewById(R.id.menu_sensor_mode)
-
-        buttonSlow.setOnClickListener {
+        // Use binding to access views
+        binding.menuButtonSlow.setOnClickListener {
             startGameWithMode(GameConstants.MODE_BUTTON_SLOW)
         }
 
-        buttonFast.setOnClickListener {
+        binding.menuButtonFast.setOnClickListener {
             startGameWithMode(GameConstants.MODE_BUTTON_FAST)
         }
 
-        sensorModeButton.setOnClickListener {
+        binding.menuSensorMode.setOnClickListener {
             startGameWithMode(GameConstants.MODE_SENSOR)
         }
+
+        binding.menuButtonHighScores.setOnClickListener {
+            val intent = Intent(this, HighScoresActivity::class.java)
+            startActivity(intent)
+        }
+        // --------------------------
     }
 
     private fun startGameWithMode(gameMode: String) {

@@ -26,4 +26,5 @@
     <string name="buttons_fast_speed_text_view">Buttons - Fast Speed</string>
     <string name="sensor_controls_text_view">Sensor Controls</string>
     <string name="buttons_slow_speed_text_view">Buttons - Slow Speed</string>
+    <string name="high_scores_button">High Scores</string>
 </resources>
