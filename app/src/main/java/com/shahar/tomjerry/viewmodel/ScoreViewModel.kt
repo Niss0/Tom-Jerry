@@ -30,7 +30,7 @@ class ScoreViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     // This function provides a way to insert a score.
-    // It must be called from a coroutine, so we use viewModelScope.
+    // It must be called from a coroutine, so i use viewModelScope.
     fun insert(score: Score) = viewModelScope.launch {
         repository.insert(score)
     }

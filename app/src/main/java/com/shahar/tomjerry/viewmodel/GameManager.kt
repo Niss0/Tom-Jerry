@@ -17,7 +17,8 @@ class GameManager( val rows: Int = 9,  val cols: Int = 5) {
     }
 
     private val gameMatrix = Array(rows) { Array(cols) { CellContent.EMPTY } }
-
+    var isBonusOnCooldown = false
+        private set
     private var jerryRow = rows - 1  // Jerry's position - initially at bottom center
     private var jerryCol = 2  // Middle column
     private var lives = 3
@@ -198,5 +199,13 @@ class GameManager( val rows: Int = 9,  val cols: Int = 5) {
             gameMatrix[0][randomCol] = CellContent.COIN
         }
         Log.d("GameManager_Coins", "ADD_COIN: Coin placed at (0, $randomCol)")
+    }
+
+    fun canActivateBonus(): Boolean {
+        return !isBonusOnCooldown
+    }
+
+    fun setBonusCooldown(isOnCooldown: Boolean) {
+        this.isBonusOnCooldown = isOnCooldown
     }
 }

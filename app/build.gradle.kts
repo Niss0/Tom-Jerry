@@ -1,8 +1,10 @@
-import org.gradle.internal.impldep.org.junit.experimental.categories.Categories.CategoryFilter.exclude
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    // Add the KSP plugin for Room's annotation processing
+    alias(libs.plugins.google.ksp)
+    // Apply the Secrets Gradle Plugin
+    alias(libs.plugins.android.secrets.gradle.plugin)
 }
 
 android {
@@ -35,21 +37,41 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
 
+    // Core & UI
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.games.activity)
-    implementation(libs.androidx.compiler)
-    implementation(libs.guava) {
-        exclude(group = "com.google.guava", module = "listenablefuture")
-    }
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.recyclerview)
+
+    // Lifecycle Components (ViewModel and LiveData)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+
+
+    // Room Database
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx) // Kotlin Extensions for Room
+
+    // Google Maps and Location
+    implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
+
+
+    // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.games.activity)
+
 }

@@ -54,8 +54,8 @@ class GameActivity : AppCompatActivity(), TiltCallback {
     private lateinit var tiltDetector: TiltDetector
     private lateinit var odometerTextView: TextView
     private var currentGameMode: String? = null
-    private var currentGameDelayMs: Long = GameConstants.GAME_SPEED_NORMAL_MS // Default speed
-
+    private var currentGameDelayMs: Long = GameConstants.GAME_SPEED_NORMAL_MS
+    private var originalGameDelayMs: Long = GameConstants.GAME_SPEED_NORMAL_MS
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val scoreViewModel: ScoreViewModel by viewModels()
 
@@ -196,11 +196,38 @@ class GameActivity : AppCompatActivity(), TiltCallback {
      * @param yValue The raw Y-axis sensor value.
      */
     override fun onTiltY(yValue: Float) { // Retained for bonus feature
-        runOnUiThread {
-//            if (isGameRunning && currentGameMode == GameConstants.MODE_SENSOR) { // Example: Bonus only in sensor mode
-//                // Log.d("GameActivity", "Y-axis tilt: $yValue (Sensor Mode)")
-//                // Implement bonus speed logic here later
-//            }
+           if (yValue > 4.0f && gameManager.canActivateBonus()) {
+            activateSpeedBoost()
+        }
+    }
+
+    private fun activateSpeedBoost() {
+        // Start the cooldown immediately.
+        gameManager.setBonusCooldown(true)
+
+        // Save the original speed and apply the boost.
+        currentGameDelayMs = GameConstants.GAME_SPEED_BOOST_MS
+
+        // Visual indicator for the boost
+        jerryImageView.alpha = 0.5f
+        makeText(this, "Speed Boost!", LENGTH_SHORT).show()
+
+        // Launch a timer to end the boost.
+        lifecycleScope.launch {
+            delay(GameConstants.BONUS_DURATION_MS)
+            deactivateSpeedBoost()
+        }
+    }
+
+    private fun deactivateSpeedBoost() {
+        // Restore speed and visual state.
+        currentGameDelayMs = originalGameDelayMs
+        jerryImageView.alpha = 1.0f
+
+        // Launch a timer for the cooldown period.
+        lifecycleScope.launch {
+            delay(GameConstants.BONUS_COOLDOWN_MS)
+            gameManager.setBonusCooldown(false)
         }
     }
 
@@ -322,8 +349,8 @@ class GameActivity : AppCompatActivity(), TiltCallback {
         isScoreSaved = false // Reset the flag at the start of a new game
         isGameRunning = true
         var obstacleSpawnCounter = 0
-        var obstacleSpawnFrequency = 5 // Adjust to control how often obstacles spawn
-        var coinSpawnCounter = 0 // New local counter for coins
+        var obstacleSpawnFrequency = 5
+        var coinSpawnCounter = 0
         val coinSpawnFrequency = 5
 
         gameJob = lifecycleScope.launch(Dispatchers.Default) {
@@ -333,8 +360,6 @@ class GameActivity : AppCompatActivity(), TiltCallback {
                 gameManager.moveObstaclesAndCoinsDown()
 
                 // Check if a collision is about to occur based on the new positions.
-
-                // Obstacle Spawning Logic (from your original code structure)
                 var interactionFromItemMovement: GameManager.InteractionResult = GameManager.InteractionResult.NONE
                 if (isGameRunning) {
                     interactionFromItemMovement = gameManager.handleInteractionsAtJerryLocation()
@@ -362,9 +387,6 @@ class GameActivity : AppCompatActivity(), TiltCallback {
                         if (interactionFromItemMovement != GameManager.InteractionResult.NONE) {
                             Log.d("GameActivity_Loop", "Interaction from item movement: $interactionFromItemMovement")
                             processInteractionResult(interactionFromItemMovement)
-                            // processInteractionResult already handles UI updates like score, lives, toast, sound, game over.
-                            // It also means the matrix was updated by handleInteractionsAtJerryLocation (e.g., coin removed).
-                            // So, update the views again to reflect immediate removal if something was collected/hit.
                             if (interactionFromItemMovement == GameManager.InteractionResult.COIN_COLLECTED) {
                                 updateCoinViews() // Ensure collected coin visually disappears
                             } else if (interactionFromItemMovement == GameManager.InteractionResult.OBSTACLE_COLLISION) {
@@ -486,7 +508,6 @@ class GameActivity : AppCompatActivity(), TiltCallback {
     }
 
     // --- Helper function to position a coin ImageView ---
-// This can be very similar to positionObstacle, or identical if they use the same size logic
     private fun positionCoin(coinView: ImageView, row: Int, col: Int) {
         // Using characterSize for coins as well, adjust if coins have a different size.
         // If coinSize is different, characterSize parameter should be passed or a new var used.
@@ -526,9 +547,6 @@ class GameActivity : AppCompatActivity(), TiltCallback {
         }
 
         // Ensure all existing coin views are correctly positioned (e.g., if they moved)
-        // Since coins are added at a position and removed if collected/off-screen,
-        // they don't "move" in the UI in the same way obstacles might if you had more complex logic.
-        // But calling positionCoin ensures they are drawn correctly based on matrix data.
         for ((position, view) in coinViews) {
             positionCoin(view, position.first, position.second)
         }

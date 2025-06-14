@@ -11,4 +11,7 @@ object GameConstants {
     const val GAME_SPEED_SLOW_MS: Long = 300L   // Slower game
     const val GAME_SPEED_NORMAL_MS: Long = 200L // Default/Sensor mode speed
     const val GAME_SPEED_FAST_MS: Long = 100L   // Faster game
+    const val GAME_SPEED_BOOST_MS = 100L // Making the boost significantly faster
+    const val BONUS_DURATION_MS = 5000L // 5 seconds
+    const val BONUS_COOLDOWN_MS = 10000L // 10 seconds
 }
